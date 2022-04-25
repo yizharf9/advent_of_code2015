@@ -2,6 +2,7 @@
 //?  let mut two_d = vec!([false;1000];1000); 
 use std::fs;
 #[allow(unused_variables)]
+#[allow(non_camel_case_types)]
 pub fn run() {
     let mut grid = vec!([false;1000];1000); 
 
@@ -10,9 +11,6 @@ pub fn run() {
     // let curr_lines = &lines[0..10];
     for (i,line) in lines {
 
-        let mut action_slice = &line[0..7];                   //determine the action of line - turn on,off,toggle
-        action_slice = action_slice.trim();
-        
         //? three options of possible line structure :
         //1: turn on 489,959 through 759,964
         //2: turn off 427,423 through 929,502
@@ -20,7 +18,7 @@ pub fn run() {
 
         println!("{line}");
         
-        let mut start = 0;                //
+        let mut start = 0;
 
         if line.contains("turn on") {
             println!("turning on...");
@@ -86,17 +84,22 @@ pub fn run() {
         for Point { x:_x, y:_y } in area.points{
             let mut pointOnGrid = grid[_x as usize][_y as usize];
 
-            if action_slice.contains("turn on") {
+            if line.contains("turn on") {
+                // println!("before : {pointOnGrid}");
                 pointOnGrid = true;
             }
-            else if action_slice.contains("turn off") {
+            else if line.contains("turn off") {
+                // println!("before : {pointOnGrid}");
                 pointOnGrid = false;
-
             }
-            else if action_slice.contains("toggle") {
+            else if line.contains("toggle") {
+                // println!("before : {pointOnGrid}");
                 pointOnGrid = !pointOnGrid;
             }
             grid[_x as usize][_y as usize]= pointOnGrid;
+            // let mut pointOnGrid = grid[_x-1 as usize][_y-1 as usize];
+
+            // println!("after : {pointOnGrid}\n")
         }
     }
 
@@ -114,32 +117,6 @@ pub fn run() {
     println!("{count}");
 
 }
-
-pub fn get_action(line:String)-> Box<dyn Fn(&bool)->()> {
-    let mut Action= Box::new(|_ :&bool|{()});
-        if line.starts_with("turn on") {
-            println!("turning on...");
-            let Action = Box::new(|mut x:bool|{ x=true ; });
-        }
-        else if line.starts_with("turn off") {
-            println!("turning off...");
-            let Action = Box::new(|mut x:bool|{x=false ;});
-        }
-        else if line.starts_with("toggle") {
-            println!("toggling...");
-            let Action = Box::new(|mut x:bool|{x=!x});
-        }
-    // return Box::new(|x:bool| Action&&x);
-    return Action;
-}
-
-
-pub fn ex_file() ->String {
-    let instructions =  fs::read_to_string("./excercice.txt").unwrap();
-    // println!("{instructions}");
-    return instructions
-}
-
 pub struct Aera{
     pub points : Vec<Point>
     // points : Vec<Vec<Point>> ////!
@@ -184,4 +161,28 @@ enum action {
     turn_on,
     turn_off,
     toggle
+}
+
+pub fn ex_file() ->String {
+    let instructions =  fs::read_to_string("./excercice.txt").unwrap();
+    // println!("{instructions}");
+    return instructions
+}
+
+pub fn get_action(line:String)-> Box<dyn Fn(&bool)->()> {
+    let mut Action= Box::new(|_ :&bool|{()});
+        if line.starts_with("turn on") {
+            println!("turning on...");
+            let Action = Box::new(|mut x:bool|{ x=true ; });
+        }
+        else if line.starts_with("turn off") {
+            println!("turning off...");
+            let Action = Box::new(|mut x:bool|{x=false ;});
+        }
+        else if line.starts_with("toggle") {
+            println!("toggling...");
+            let Action = Box::new(|mut x:bool|{x=!x});
+        }
+    // return Box::new(|x:bool| Action&&x);
+    return Action;
 }
