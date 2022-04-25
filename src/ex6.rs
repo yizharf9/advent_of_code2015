@@ -4,7 +4,7 @@ use std::fs;
 #[allow(unused_variables)]
 #[allow(non_camel_case_types)]
 pub fn run() {
-    let mut grid = vec!([false;1000];1000); 
+    let mut grid = vec!([0;1000];1000); 
 
     let content = ex_file();
     let mut lines = content.split("\r").enumerate();
@@ -16,20 +16,20 @@ pub fn run() {
         //2: turn off 427,423 through 929,502
         //3: toggle 756,965 through 812,992
 
-        println!("{line}");
+        // println!("{line}");
         
         let mut start = 0;
 
         if line.contains("turn on") {
-            println!("turning on...");
+            // println!("turning on...");
             start = 8
         }
         else if line.contains("turn off") {
-            println!("turning off...");
+            // println!("turning off...");
             start = 9
         }
         else if line.contains("toggle") {
-            println!("toggling...");
+            // println!("toggling...");
             start = 8
         }
 
@@ -67,8 +67,8 @@ pub fn run() {
                 .unwrap()
         ];
         // 
-        println!(" point a: ({x_a} , {y_a})");
-        println!(" point b : ({x_b} , {y_b})");
+        // println!(" point a: ({x_a} , {y_a})");
+        // println!(" point b : ({x_b} , {y_b})");
 
         if x_a>x_b||y_a>y_b {               ////! point a's x & y MUST be greater than b's accordingly:
             panic!("incompatable coors")    ////! such a panic means that either the data is corrupted
@@ -82,21 +82,21 @@ pub fn run() {
         // let action = get_action(String::from(action_slice)); ////! trial for an enum that returns closure
         
         for Point { x:_x, y:_y } in area.points{
-            let mut pointOnGrid = grid[_x as usize][_y as usize];
+            let mut pointOnGrid = grid[_x-1 as usize][_y-1 as usize];
 
             if line.contains("turn on") {
                 // println!("before : {pointOnGrid}");
-                pointOnGrid = true;
+                pointOnGrid += 1;
             }
-            else if line.contains("turn off") {
+            else if line.contains("turn off")&&pointOnGrid>0 {
                 // println!("before : {pointOnGrid}");
-                pointOnGrid = false;
+                pointOnGrid -= 1;
             }
             else if line.contains("toggle") {
                 // println!("before : {pointOnGrid}");
-                pointOnGrid = !pointOnGrid;
+                pointOnGrid += 2;
             }
-            grid[_x as usize][_y as usize]= pointOnGrid;
+            grid[_x-1 as usize][_y-1 as usize]= pointOnGrid;
             // let mut pointOnGrid = grid[_x-1 as usize][_y-1 as usize];
 
             // println!("after : {pointOnGrid}\n")
@@ -109,9 +109,7 @@ pub fn run() {
     let mut count = 0;
     for line in grid { //counting turned on lights
         for var in line {
-            if var {
-                count+=1;
-            }
+            count+=var;
         }
     }
     println!("{count}");
@@ -169,6 +167,7 @@ pub fn ex_file() ->String {
     return instructions
 }
 
+#[allow(unused)]
 pub fn get_action(line:String)-> Box<dyn Fn(&bool)->()> {
     let mut Action= Box::new(|_ :&bool|{()});
         if line.starts_with("turn on") {
