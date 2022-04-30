@@ -1,7 +1,6 @@
 use std::fs::{self, File};
 use std::collections::HashMap;
 use std::io::{self,prelude::*,BufReader};
-use std::result;
 
 pub fn run(){
     let mut map:HashMap<String,u16> = HashMap::new();
@@ -9,18 +8,16 @@ pub fn run(){
     while let None = map.get(&String::from("a")) {
         let content = ex_file();
         check_values(content, &mut map);
-        println!("{map:#?}")
     }
     
     let A =  map.get(&String::from("a")).unwrap() ;
-    println!("{A}")
+    println!("{A}");
 }
 
 fn check_values(content: BufReader<File>,map:&mut HashMap<String,u16>) {
     for res in content.lines(){
         let line = res.unwrap();
         let (kind,a,b,target,op) = CmdLine::new(line);
-        // println!("a: {a}\nb: {b}\ntarget: {target}\n");
 
         //? all possible actions =>( "NOT" : !, "OR" : |, "AND" : &, "RSHIFT" : >>, "LSHIFT" : <<)
         if kind == "AND"||kind == "OR"{
@@ -68,13 +65,11 @@ fn check_values(content: BufReader<File>,map:&mut HashMap<String,u16>) {
     }
 }
 
-
 fn ex_file()-> BufReader<File>{
     let file = File::open("./excercice.txt").unwrap();
     let reader = BufReader::new(file);
     return reader
 }
-
 
 pub struct CmdLine {
     a : String,

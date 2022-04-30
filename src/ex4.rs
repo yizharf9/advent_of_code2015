@@ -16,12 +16,4 @@ pub fn run(){
     }
 }
 
-pub fn test(){
-    let mut arr = [9,45,0,5,3,6,4];
-
-    let mut a = &arr[3];
-    println!("{a}");
-    a = &1000;
-    println!("{a}");
-}
 

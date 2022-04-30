@@ -1,5 +1,6 @@
 //?  two d arry\vector example :
-//?  let mut two_d = vec!([false;1000];1000); 
+//  let two_d = vec!([false;1000];1000); 
+
 use std::fs;
 #[allow(unused_variables)]
 #[allow(non_camel_case_types)]
