@@ -4,22 +4,27 @@ pub  fn run(){
         let input =fs::read_to_string("C:/Users/user/coding/rust/test_file/src/excercice.txt").unwrap_or(String::from("didnt execute properly..."));
         
         let mut location = Coor{x:0,y:0};
-        // let mut robo_location = Coor{x:0,y:0};
+        let mut robo_location = Coor{x:0,y:0};
         let mut stops : Vec<Coor> = vec!(Coor{x:0,y:0});
         let mut arrived : Vec<Coor> = vec!();
+        let mut robo_turn = false;
         // let mut arrived : Vec<Coor> = vec!();
         
         // println!("{input}");
         
         for char in input.chars() {
-
-            location = location.move_coor(char);
-            // robo_location = robo_location.robo_move_coor(char);
-
-            let Coor { x, y } = location;
-            let added_stop = Coor{x:x.clone(),y:y.clone()};
-
-            stops.push(added_stop);
+            if robo_turn {
+                robo_location = robo_location.move_coor(char); 
+                let Coor{x,y}=robo_location;
+                let added_robo_stop = Coor{x:x.clone(),y:y.clone()};
+                stops.push(added_robo_stop);
+            }else {
+                location = location.move_coor(char);
+                let Coor{x,y}=location;
+                let added_stop = Coor{x:x.clone(),y:y.clone()};
+                stops.push(added_stop);
+            }
+            robo_turn = !robo_turn
         }
 
         for coor in &stops {
@@ -29,7 +34,6 @@ pub  fn run(){
                     x:x.clone(),
                     y:y.clone()
                 };
-
                 arrived.push(added);
             }
         }
@@ -76,25 +80,6 @@ impl PartialEq for Coor {
         // println!("x:{},y:{}",self.x,self.y);
         return self
     }
-
-        fn robo_move_coor(mut self,movement:char,robo:Option<bool> ) ->Self {
-        if movement=='>' {
-            self.x+=1;
-        }
-        else if movement=='<' {
-            self.x-=1;
-        }
-        else if movement=='^' {
-            self.y+=1
-        }
-        else if movement=='v'||movement=='V' {
-            self.y-=1
-        }
-        // println!("x:{},y:{}",self.x,self.y);
-        return self
-    }
-
-
 
     //method that retruns if a coor is included in coor vec
     pub fn included_in(&self,stops:&Vec<Coor>)->bool { 

@@ -1,5 +1,5 @@
-use std::fs::{self, File};
 use std::collections::HashMap;
+use std::fs::{self, File};
 use std::io::{self,prelude::*,BufReader};
 
 pub fn run(){
