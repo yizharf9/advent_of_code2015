@@ -31,16 +31,19 @@ pub fn run() {
                 println!("=>  \"\"");
                 stored -=1;
             }
-            if &line[i..i+2] == "\\x" {
+            if &line[i..i+2] == "\\x"  {
                 let full_phrase = &line[i..i+4].to_lowercase().to_owned();
                 
-                if let Ok(hex)= hex::decode(&line[i+2..i+4]){
-                    let hex = (hex[0] as char);
-                    if !hex.is_whitespace() {
-                        println!("phrase : {full_phrase}");
-                        println!("hex : {hex:?}");
-                        stored -=3;
+                match hex::decode(&line[i+2..i+4]){
+                    Ok(hex)=>{
+                        let hex = (hex[0] as char);
+                        if !hex.is_whitespace() {
+                            println!("phrase : {full_phrase}");
+                            println!("hex : {hex:?}");
+                            stored -=3;
+                        }
                     }
+                    Err(_)=> println!("not a hex value")
                 }
             }
         }

@@ -2,6 +2,7 @@ use std::cmp::max_by_key;
 use std::collections::{HashMap, HashSet};
 use std::fs::File;
 use std::io::{BufRead, BufReader};
+use crate::utils::ex_file;
 
 pub fn run() {
     let sample_path = "./sample.txt";
@@ -20,18 +21,9 @@ pub fn run() {
     let locations:Vec<String> = locations.into_iter().collect();
     let mut result: Vec<Vec<String>>= vec![];
     let mut current_route: Vec<String>= vec![];
-    println!("{:?}",locations);
-    println!("{}",locations.len());
     
     get_routes(locations,&mut current_route,&mut result);
 
-    println!("{:?}",roads);
-    println!("{}",result.len());
-    // for route in result{
-    //     println!("{:?}",route);
-    //     let distance = get_total_distance(route, &roads);
-    //     println!("{:?}",distance);
-    // }
     let longest = result
     .iter()
     .map(|route| get_total_distance(route.to_owned(), &roads)).max().unwrap();
@@ -77,12 +69,6 @@ fn extract(line:String)->(String,String,i32) {
     let _b = vals[2].to_string();
     let dist = vals[4].parse::<i32>().unwrap() ;
     return (_a,_b,dist)
-}
-
-pub fn ex_file(path:&str)-> BufReader<File>{
-    let file = File::open(path).unwrap();
-    let reader = BufReader::new(file);
-    return reader
 }
 
 fn get_total_distance(route:Vec<String>,roads:&HashMap<(String,String),i32>)->i32 {
