@@ -1,5 +1,3 @@
-use std::char;
-
 pub fn run() {
     let content = "1113222113".to_string();
     let n = 50;
